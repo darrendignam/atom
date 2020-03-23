@@ -1,0 +1,9 @@
+# Columns that should be included in the actor relation iport
+columnNames:
+ - sourceAuthorizedFormOfName
+ - targetAuthorizedFormOfName
+ - category
+ - description
+ - date
+ - startDate
+ - endDate

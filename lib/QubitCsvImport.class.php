@@ -78,6 +78,11 @@ class QubitCsvImport
 
         break;
 
+      case 'authorityRecordRelationship':
+        $taskClassName = 'csv:authority-relation-import';
+
+        break;
+
       case 'event':
         $taskClassName = 'csv:event-import';
 
@@ -100,6 +105,9 @@ class QubitCsvImport
 
     // Figure out whether user option should be added to command
     $commandUser = ($taskClassName == 'csv:import') ? sprintf('--user-id="%s"', sfContext::getInstance()->getUser()->getUserId()) : '';
+
+    // Figure out whether a source name should be added to command
+    $commandSourceName = ($taskClassName != 'csv:authority-relation-import') ? sprintf('--source-name="%s"', escapeshellarg($csvOrigFileName)) : '';
 
     if ('' !== $this->updateType)
     {
@@ -126,7 +134,7 @@ class QubitCsvImport
     if (isset($this->parent))
     {
       // Example: php symfony csv:import --default-parent-slug="$sourceName" /tmp/foobar
-      $command = sprintf('php %s %s %s %s %s %s %s %s --quiet --source-name=%s --default-parent-slug=%s %s',
+      $command = sprintf('php %s %s %s %s %s %s %s %s %s --quiet --default-parent-slug=%s %s',
         escapeshellarg(sfConfig::get('sf_root_dir').DIRECTORY_SEPARATOR.'symfony'),
         escapeshellarg($taskClassName),
         $commandIndexFlag,
@@ -135,14 +143,14 @@ class QubitCsvImport
         $commandSkipUnmatched,
         $commandSkipMatched,
         $commandUser,
-        escapeshellarg($csvOrigFileName),
+        $commandSourceName,
         escapeshellarg($this->parent->slug),
         escapeshellarg($transformedFile ? $transformedFile : $csvFile));
     }
     else
     {
       // Example: php symfony csv:import /tmp/foobar
-      $command = sprintf('php %s %s %s %s %s %s %s --quiet %s --source-name=%s %s',
+      $command = sprintf('php %s %s %s %s %s %s %s %s %s --quiet %s',
         escapeshellarg(sfConfig::get('sf_root_dir').DIRECTORY_SEPARATOR.'symfony'),
         escapeshellarg($taskClassName),
         $commandIndexFlag,
@@ -151,7 +159,7 @@ class QubitCsvImport
         $commandSkipUnmatched,
         $commandSkipMatched,
         $commandUser,
-        escapeshellarg($csvOrigFileName),
+        $commandSourceName,
         escapeshellarg($transformedFile ? $transformedFile : $csvFile));
     }
 
