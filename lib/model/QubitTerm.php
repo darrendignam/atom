@@ -745,11 +745,10 @@ class QubitTerm extends BaseTerm
   }
 
   /**
-   * Get a count of objects related via q_object_term_relation that have a
-   * class_name = $objectClassName (i.e. only 'QubitInformationObject's)
+   * Get a count of related information objects
    *
-   * @param string $objectClassName related object class_name column value
-   * @return integer count of related object.
+   * @param integer  ID of term
+   * @return integer  count of related information objects
    */
   public static function countRelatedInformationObjects($id)
   {
@@ -762,6 +761,24 @@ class QubitTerm extends BaseTerm
 
     // Only get published info objects
     $criteria = QubitAcl::addFilterDraftsCriteria($criteria);
+
+    return BasePeer::doCount($criteria)->fetchColumn(0);
+  }
+
+  /**
+   * Get a count of related actors
+   *
+   * @param integer  ID of term
+   * @return integer  count of related actors
+   */
+  public static function countRelatedActors($id)
+  {
+    $criteria = new Criteria;
+    $criteria->add(QubitTerm::ID, $id);
+
+    $criteria->addJoin(QubitTerm::ID, QubitObject::ID);
+    $criteria->addJoin(QubitTerm::ID, QubitObjectTermRelation::TERM_ID);
+    $criteria->addJoin(QubitObjectTermRelation::OBJECT_ID, QubitActor::ID);
 
     return BasePeer::doCount($criteria)->fetchColumn(0);
   }

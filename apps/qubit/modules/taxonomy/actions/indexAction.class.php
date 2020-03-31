@@ -130,24 +130,27 @@ class TaxonomyIndexAction extends sfAction
       $request->sortDir = $sortDir;
     }
 
-    $this->addResultsColumn = false;
+    $this->addDescriptionResultsColumn = false;
 
     switch ($this->resource->id)
     {
       case QubitTaxonomy::PLACE_ID:
         $this->icon = 'places';
-        $this->addResultsColumn = true;
+        $this->addDescriptionResultsColumn = true;
+        $this->addAuthorityResultsColumn = true;
 
         break;
 
       case QubitTaxonomy::SUBJECT_ID:
         $this->icon = 'subjects';
-        $this->addResultsColumn = true;
+        $this->addDescriptionResultsColumn = true;
+        $this->addAuthorityResultsColumn = true;
 
         break;
 
       case QubitTaxonomy::GENRE_ID:
-        $this->addResultsColumn = true;
+        $this->addDescriptionResultsColumn = true;
+        $this->addAuthorityResultsColumn = true;
 
         break;
     }
