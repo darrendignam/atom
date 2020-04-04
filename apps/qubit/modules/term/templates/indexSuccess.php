@@ -68,6 +68,15 @@
 
   <h1><?php echo render_title($resource) ?></h1>
 
+  <ul class="nav nav-tabs">
+    <li class="nav-item active">
+      <a class="nav-link" href="#"><?php echo __('Related Descriptions') ?></a>
+    </li>
+    <li class="nav-item">
+      <?php echo link_to(__('Related Authorities'), array($resource, 'module' => 'term', 'action' => 'relatedAuthorities'), array('class' => 'nav-link')) ?>
+    </li>
+  </ul>
+
   <?php if (isset($errorSchema)): ?>
     <div class="messages error">
       <ul>
