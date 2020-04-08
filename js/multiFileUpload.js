@@ -24,28 +24,34 @@
             }
           };
 
-          function replacePlaceHolder(templateStr, index)
-          {
-            var fileName = null;
-            index = String(index);
+          function replacePlaceHolder(templateStr, index) {
+             var fileName = null;
 
+            var complex_matchs = templateStr.match(/\%(d+) (\d+)\%/);
             var matches = templateStr.match(/\%(d+)\%/);
-
-            if (null != matches && 0 < matches[1].length)
-            {
-              while (matches[1].length > index.length)
-              {
+            
+            if (null != complex_matchs && 0 < complex_matchs[2].length) {
+              index = String(index - 1 + parseInt(complex_matchs[2]));
+              
+              while (complex_matchs[1].length > index.length) {
                 index = '0' + index;
               }
-
+              
+              var fileName = templateStr.replace('%' + complex_matchs[1] + ' ' + complex_matchs[2] + '%', index);
+            
+            } else if (null != matches && 0 < matches[1].length) {
+              index = String(index);
+              while (matches[1].length > index.length) {
+                index = '0' + index;
+              }
+              
               var fileName = templateStr.replace('%' + matches[1] + '%', index);
             }
-
-            if (null == fileName || templateStr == fileName)
-            {
+            
+            if (null == fileName || templateStr == fileName) {
               fileName = templateStr + ' ' + index;
             }
-
+            
             return fileName;
           }
 
